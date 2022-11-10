@@ -16,7 +16,7 @@ function App() {
       setBooks(res);
     };
     getBooks();
-  }, [])
+    }, [])
 
 
   
@@ -24,7 +24,7 @@ function App() {
   return (
     <div className="app">
       {showSearchPage ? (
-        <Search />
+        <Search showP={showSearchPage} setshowP={setShowSearchpage}  searchingBooks={books}/>
       ) : (
         <div className="list-books">
           <div className="list-books-title">
