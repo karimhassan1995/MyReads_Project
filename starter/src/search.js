@@ -1,5 +1,29 @@
-const Search = ({showP , setshowP ,searchingBooks })=> {
+import {useState , useEffect} from "react";
+import * as BooksAPI from "./BooksAPI" 
 
+const Search = ({showP , setshowP })=> {
+
+    const [searchedBooks , setSearchedBooks ] = useState("");
+
+    const updateSearchedBooks = (event) => {
+        setSearchedBooks(event.target.value.trim());
+    }
+
+    const [showingBooks , setshowingBooks]= useState([]) 
+
+    useEffect (() => {
+            BooksAPI.search(searchedBooks , 10).then((res) => {
+                if (res == undefined || res.error) res = []
+                setshowingBooks(res);
+            });
+        }, [searchedBooks])
+    
+        
+      
+   
+
+   
+    
 
     return (
             <div>
@@ -15,6 +39,8 @@ const Search = ({showP , setshowP ,searchingBooks })=> {
                         <input
                             type="text"
                             placeholder="Search by title, author, or ISBN"
+                            value={searchedBooks}
+                            onChange={updateSearchedBooks}
                         />
                         </div>
                     </div>
@@ -24,7 +50,7 @@ const Search = ({showP , setshowP ,searchingBooks })=> {
                 </div>
                 <ul className="books-grid">
                 {
-                    searchingBooks.map((book) =>(
+                    showingBooks.map((book) =>(
                     <li  key={book.id}>
                         <div className="book">
                             <div className="book-top">
@@ -34,11 +60,11 @@ const Search = ({showP , setshowP ,searchingBooks })=> {
                                 style={{
                                 width: 128,
                                 height: 193,
-                                    backgroundImage: `url(${book.imageLinks.thumbnail})` 
+                                    backgroundImage: `url(${book.imageLinks?.thumbnail})` 
                                 }}
                                 ></div>
                             <div className="book-shelf-changer">
-                                <select>
+                                <select value="none">
                                     <option value="none" disabled>
                                         Move to...
                                     </option>
