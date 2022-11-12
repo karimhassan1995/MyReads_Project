@@ -1,29 +1,40 @@
 import "./App.css";                                           
-import { useState } from "react";                   
+import { useState ,useEffect} from "react";                   
 import Search from "./search";  
 import CurrentlyReadingBook from "./currentlyReadingBook" 
 import WantToReadBook from "./wantToRead"
 import Read from "./readbook"
-
-                               
-                                         
+import * as BooksAPI from "./BooksAPI" 
 
 
 function App() {
   
   const [showSearchPage, setShowSearchpage] = useState(false);   
   
-
-  
-  
-    const [currentlyReading , setcurrentlyReading ] = useState([]);         
+  const [currentlyReading , setcurrentlyReading ] = useState([]);         
   const [wantToRead , setwantToRead] = useState([]);              
-  const [read , setRead] = useState([]);                       
+  const [read , setRead] = useState([]);    
+  
+  
+  useEffect (() => {
+    const getBooks = async () => {
+      const res = await BooksAPI.getAll(); 
+      let r = [res[0],res[1]]
+      let w = [res[2],res[3]]
+      let k = [res[4],res[5],res[6]]  
+      console.log(res)              
+      setcurrentlyReading(r)
+       setwantToRead(w)
+      setRead(k)
+    };
+    getBooks();                                                 
+    }, [])
+  
 
   const chosenNewShelf = (event, book) => {
     const selectedOption = event.target.value
     changeShelfOfBook(selectedOption,book)
-}
+  }
 
   const deleteShelfOfBook =(currentShelf,book) => {
     if(currentShelf === "currentlyReading")
