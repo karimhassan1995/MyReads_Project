@@ -44,7 +44,7 @@ const Book = ({book, deleteShelf, changeShelf, changeDetailsOfBook, stateOfBook}
                 </div>
             </div>
             <div className="book-title">{book.title}</div>
-            <div className="book-authors">{book.autors}</div>
+            <div className="book-authors">{book.authors}</div>
         </div>
     )
 }
