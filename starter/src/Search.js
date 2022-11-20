@@ -2,31 +2,39 @@ import {useState, useEffect} from "react";
 import * as BooksAPI from "./BooksAPI"
 import {Link} from "react-router-dom"
 import PropTypes from "prop-types"
+import Book from "./Book"
 
 const Search = ({changeShelf, currentlyReadingarray, wantToReadarray, readarray}) => {/*1*/
 
-    const [searchedBooks,
-        setSearchedBooks] = useState("");
+    const [searchedQuery,
+        setSearchedQuery] = useState("");
 
-    const updateSearchedBooks = (event) => {
-        setSearchedBooks(event.target.value);
+    const updateSearchedQuery = (event) => {
+        setSearchedQuery(event.target.value);
     }
 
-    const [showingBooks,
-        setshowingBooks] = useState([])
+    const [searchedBooks,
+        setsearchedBooks] = useState([])
 
     useEffect(() => {
         BooksAPI
-            .search(searchedBooks, 10)
+            .search(searchedQuery, 10)
             .then((res) => {
                 if (res === undefined || res.error) 
                     res = []
-                setshowingBooks(res);
+                    setsearchedBooks(res);
             });
-    }, [searchedBooks])
+    }, [searchedQuery])
 
-    const concatenatedarr1 = currentlyReadingarray.concat(wantToReadarray);
-    const concatenatedarr2 = concatenatedarr1.concat(readarray);
+    const concatenatedarray = currentlyReadingarray.concat(wantToReadarray).concat(readarray);
+  
+
+    for(let i = 0; i < searchedBooks.length; i++) {
+        const foundBook = concatenatedarray.find((b)=> b.id === searchedBooks[i].id);
+       if (foundBook) {
+           searchedBooks[i].shelf = foundBook.shelf ;
+       }
+    }
 
     return (
         <div>
@@ -39,56 +47,15 @@ const Search = ({changeShelf, currentlyReadingarray, wantToReadarray, readarray}
                         <input
                             type="text"
                             placeholder="Search by title, author, or ISBN"
-                            value={searchedBooks}
-                            onChange={updateSearchedBooks}/>
+                            value={searchedQuery}
+                            onChange={ updateSearchedQuery }/>
                     </div>
                 </div>
             </div>
             <ul className="books-grid">
-                {showingBooks.map((book) => (
+                {searchedBooks.map((book) => (
                     <li key={book.id}>
-                        <div className="book">
-                            <div className="book-top">
-                                <div
-                                    className="book-cover"
-                                    style={{
-                                        width: 128,
-                                        height: 193,
-                                        backgroundImage: `url(${book.imageLinks?.thumbnail})`
-                                    }}></div>
-                                <div className="book-shelf-changer">
-                                    <select
-                                        value="none"
-                                        onChange={concatenatedarr2.filter((d) => d.id === book.id).length === 0 ? (e) => changeShelf(e, book) : ""}>
-                                        <option value="none" disabled>
-                                            Move to...
-                                        </option>
-                                        <option
-                                            value="currentlyReading"
-                                            className={currentlyReadingarray.filter((d) => d.id === book.id).length > 0 ? "backgroundcolor" : ""}>
-                                            Currently Reading
-                                        </option>
-                                        <option
-                                            value="wantToRead"
-                                            className={wantToReadarray.filter((d) => d.id === book.id).length > 0 ? "backgroundcolor" : ""}>
-                                            Want to Read
-                                        </option>
-                                        <option
-                                            value="read"
-                                            className={readarray.filter((d) => d.id === book.id).length > 0 ? "backgroundcolor" : ""}>
-                                            Read
-                                        </option>
-                                        <option
-                                            value="none"
-                                            className={concatenatedarr2.filter((d) => d.id === book.id).length === 0 ? "backgroundcolor" : ""}>
-                                            None
-                                            </option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div className="book-title">{book.title}</div>
-                            <div className="book-authors">{book.authors}</div>
-                        </div>
+                     <Book  changeShelf={changeShelf} book={book} />
                     </li>
                 ))
 }

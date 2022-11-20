@@ -2,7 +2,7 @@ import {Link} from "react-router-dom"
 import Shelf from "./Shelf"
 import PropTypes from "prop-types"
 
-const Home = ({deleteShelfOfBook, chosenNewShelf, changeDetailsOfBook, currentlyReading, wantToRead, read}) => {
+const Home = ({chosenNewShelf, changeDetailsOfBook, currentlyReading, wantToRead, read}) => {
 
     return (
         <div className="list-books">
@@ -12,26 +12,20 @@ const Home = ({deleteShelfOfBook, chosenNewShelf, changeDetailsOfBook, currently
             <div className="list-books-content">
                 <div>
                     <Shelf
-                        deleteShelf={deleteShelfOfBook}
                         changeShelf={chosenNewShelf}
                         changeDetailsOfBook={changeDetailsOfBook}
                         books={currentlyReading}
-                        title = "Currently Reading"
-                        stateOfBook="currentlyReading"/>
+                        title = "Currently Reading"/>
                     <Shelf
-                        deleteShelf={deleteShelfOfBook}
                         changeShelf={chosenNewShelf}
                         changeDetailsOfBook={changeDetailsOfBook}
                         books={wantToRead}
-                        title = "Want To Read"
-                        stateOfBook="wantToRead"/>
+                        title = "Want To Read"/>
                     <Shelf
-                        deleteShelf={deleteShelfOfBook}
                         changeShelf={chosenNewShelf}
                         changeDetailsOfBook={changeDetailsOfBook}
                         books={read}
-                        title = "Read"
-                        stateOfBook="read"/>
+                        title = "Read"/>
                 </div>
             </div>
             <div className="open-search">
@@ -45,7 +39,6 @@ Home.propTypes = {
     currentlyReading: PropTypes.array.isRequired,
     wantToRead: PropTypes.array.isRequired,
     read: PropTypes.array.isRequired,
-    deleteShelfOfBook: PropTypes.func.isRequired,
     chosenNewShelf: PropTypes.func.isRequired,
 };
 

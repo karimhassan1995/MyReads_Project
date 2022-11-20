@@ -22,13 +22,9 @@ function App() {
     useEffect(() => {
         const getBooks = async() => {
             const res = await BooksAPI.getAll();
-            let r = [res[0], res[1]]
-            let w = [res[2], res[3]]
-            let k = [res[4], res[5], res[6]]
-            console.log(res)
-            setcurrentlyReading(r)
-            setwantToRead(w)
-            setRead(k)
+            setcurrentlyReading([res[0], res[1]])
+            setwantToRead([res[2], res[3]])
+            setRead( [res[4], res[5], res[6]])
         };
         getBooks();
     }, [])
@@ -48,12 +44,17 @@ function App() {
     }
 
     const changeShelfOfBook = (targetShelf, book) => {
-        if (targetShelf === 'currentlyReading') 
+        deleteShelfOfBook(book.shelf, book)
+        if (targetShelf === 'currentlyReading'){ 
             setcurrentlyReading([...currentlyReading, book])
-        else if (targetShelf === 'wantToRead') 
+         }
+        else if (targetShelf === 'wantToRead'){
             setwantToRead([...wantToRead, book])
-        else if (targetShelf === 'read') 
+        }
+        else if (targetShelf === 'read'){
             setRead([...read, book])
+        }
+        book.shelf = targetShelf
     }
 
     return (
@@ -65,13 +66,12 @@ function App() {
                   < Search changeShelf = { chosenNewShelf }
                            currentlyReadingarray = {currentlyReading}
                            wantToReadarray = {wantToRead}
-                           readarray = {read} />
+                           readarray = {read}/>
                 }/>
             <Route
                 path="/"
                 element={
-                  < Home deleteShelfOfBook = { deleteShelfOfBook }
-                         chosenNewShelf = { chosenNewShelf }
+                  < Home chosenNewShelf = { chosenNewShelf }
                          changeDetailsOfBook = {changeDetailsOfBook}
                          currentlyReading = { currentlyReading }
                          wantToRead = { wantToRead }

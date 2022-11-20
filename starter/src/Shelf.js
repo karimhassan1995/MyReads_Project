@@ -1,7 +1,7 @@
 import Book from "./Book"
 import PropTypes from "prop-types"
 
-const Shelf = ({deleteShelf, changeShelf, changeDetailsOfBook, books, title , stateOfBook}) => {
+const Shelf = ({changeShelf, changeDetailsOfBook, books, title}) => {
 
     return (
         <div className="bookshelf">
@@ -12,10 +12,8 @@ const Shelf = ({deleteShelf, changeShelf, changeDetailsOfBook, books, title , st
                         <li key={book.id}>
                             <Book
                                 book={book}
-                                deleteShelf={deleteShelf}
                                 changeShelf={changeShelf}
-                                changeDetailsOfBook={changeDetailsOfBook}
-                                stateOfBook={stateOfBook}/>
+                                changeDetailsOfBook={changeDetailsOfBook}/>
                         </li>
                     ))
                     }
@@ -28,8 +26,6 @@ const Shelf = ({deleteShelf, changeShelf, changeDetailsOfBook, books, title , st
 Shelf.propTypes = {
   books: PropTypes.array.isRequired,
   title: PropTypes.string.isRequired,
-  stateOfBook: PropTypes.string.isRequired,
-  deleteShelf: PropTypes.func.isRequired,
   changeShelf: PropTypes.func.isRequired,
 };
 
