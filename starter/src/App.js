@@ -13,21 +13,23 @@ function App() {
     const [wantToRead,setwantToRead] = useState([]);
     const [read,setRead] = useState([]);
 
+    
+
     const [detailsOfBook , setDetailsOfBook] = useState({});
     const changeDetailsOfBook = (book) =>{
-    console.log(book)
       setDetailsOfBook(book);
     }
 
     useEffect(() => {
         const getBooks = async() => {
             const res = await BooksAPI.getAll();
-            setcurrentlyReading([res[0], res[1]])
-            setwantToRead([res[2], res[3]])
-            setRead( [res[4], res[5], res[6]])
+           setcurrentlyReading(res.filter((b) => b.shelf === 'currentlyReading'))
+           setwantToRead(res.filter((b) => b.shelf === 'wantToRead'))
+           setRead(res.filter((b) => b.shelf === 'read'))
         };
         getBooks();
     }, [])
+
 
     const chosenNewShelf = (event, book) => {
         const selectedOption = event.target.value
@@ -55,6 +57,7 @@ function App() {
             setRead([...read, book])
         }
         book.shelf = targetShelf
+        BooksAPI.update(book , book.shelf)
     }
 
     return (
